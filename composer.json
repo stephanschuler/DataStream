@@ -1,0 +1,21 @@
+{
+    "name": "stephanschuler/data-stream",
+    "description": "",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stephan Schuler",
+            "email": "stephan.schuler@netlogix.de"
+        }
+    ],
+    "require": {
+        "php": "~7.0",
+        "hakre/xmlreaderiterator": "^0.1.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "StephanSchuler\\DataStream\\": "src"
+        }
+    }
+}
