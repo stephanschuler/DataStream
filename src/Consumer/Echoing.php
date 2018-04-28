@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Consumer;
 
-use StephanSchuler\DataStream\Provider\ProviderInterface;
-
 class Echoing implements ConsumerInterface
 {
+    use ConsumerTrait;
+
     const TEMPLATE = '
 <h1>%s</h1>
 <pre>%s</pre>
@@ -17,12 +17,6 @@ class Echoing implements ConsumerInterface
     protected function __construct(string $name)
     {
         $this->name = $name;
-    }
-
-    public function providedBy(ProviderInterface $provider)
-    {
-        /** @var ConsumerInterface $this */
-        $provider->consumedBy($this);
     }
 
     public static function createConsumer(string $name = 'default'): Echoing
