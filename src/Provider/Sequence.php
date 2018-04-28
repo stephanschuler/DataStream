@@ -5,14 +5,10 @@ namespace StephanSchuler\DataStream\Provider;
 
 use ArrayIterator;
 use Iterator;
-use StephanSchuler\DataStream\Consumer\ConsumerInterface;
 
 class Sequence implements ProviderInterface
 {
-    /**
-     * @var ConsumerInterface[]
-     */
-    protected $consumers = [];
+    use ProviderTrait;
 
     /**
      * @var Iterator
@@ -22,11 +18,6 @@ class Sequence implements ProviderInterface
     protected function __construct($source)
     {
         $this->source = $source;
-    }
-
-    public function consumedBy(ConsumerInterface $consumer)
-    {
-        $this->consumers[] = $consumer;
     }
 
     public function provide()
