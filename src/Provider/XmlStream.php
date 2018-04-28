@@ -41,6 +41,8 @@ class XmlStream implements ProviderInterface
                 $consumer->consume($element->getSimpleXMLElement());
             }
         }
+
+        $reader->close();
     }
 
     public static function createProvider(string $fileName, string $xpath = '/*'): XmlStream
