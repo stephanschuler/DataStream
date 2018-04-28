@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Transport;
 
-class DistinctUntilChanged implements TransportInterface
+use StephanSchuler\DataStream\Consumer\StatefulInterface;
+
+class DistinctUntilChanged implements TransportInterface, StatefulInterface
 {
     use TransportTrait;
 
@@ -29,6 +31,11 @@ class DistinctUntilChanged implements TransportInterface
         foreach ($this->consumers as $consumer) {
             $consumer->consume($data);
         }
+    }
+
+    public function get()
+    {
+        return $this->lastItem;
     }
 
     public static function createTransport(): DistinctUntilChanged
