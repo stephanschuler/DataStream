@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Transport;
 
+use StephanSchuler\DataStream\Runtime\RuntimeState;
+
 class Mapper implements TransportInterface
 {
     use TransportTrait;
@@ -14,6 +16,7 @@ class Mapper implements TransportInterface
 
     protected function __construct(callable $definition)
     {
+        RuntimeState::getInstance()->addNode($this);
         $this->definition = $definition;
     }
 
@@ -30,5 +33,4 @@ class Mapper implements TransportInterface
         $className = get_called_class();
         return new $className($definition);
     }
-
 }

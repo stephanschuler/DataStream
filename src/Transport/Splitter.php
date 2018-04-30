@@ -12,5 +12,4 @@ class Splitter implements TransportInterface
         $className = get_called_class();
         return new $className($definition);
     }
-
 }

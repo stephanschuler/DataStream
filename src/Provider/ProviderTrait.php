@@ -16,4 +16,12 @@ trait ProviderTrait
     {
         $this->consumers[] = $consumer;
     }
+
+    /**
+     * @return ConsumerInterface[]
+     */
+    public function getConsumers()
+    {
+        return $this->consumers;
+    }
 }

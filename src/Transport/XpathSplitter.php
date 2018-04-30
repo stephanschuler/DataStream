@@ -19,5 +19,4 @@ class XpathSplitter implements TransportInterface
         $className = get_called_class();
         return new $className($splitter);
     }
-
 }

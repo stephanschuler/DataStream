@@ -5,6 +5,7 @@ namespace StephanSchuler\DataStream\Provider;
 
 use ArrayIterator;
 use Iterator;
+use StephanSchuler\DataStream\Runtime\RuntimeState;
 
 class Sequence implements ProviderInterface
 {
@@ -15,8 +16,9 @@ class Sequence implements ProviderInterface
      */
     protected $source;
 
-    protected function __construct($source)
+    protected function __construct(Iterator $source)
     {
+        RuntimeState::getInstance()->addNode($this);
         $this->source = $source;
     }
 
