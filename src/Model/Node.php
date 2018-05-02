@@ -78,6 +78,15 @@ class Node implements \JsonSerializable
         $this->layout = $color;
     }
 
+    public function getWeight()
+    {
+        if ($this->node instanceof ProviderInterface) {
+            return count($this->node->getConsumers()) + 1;
+        } else {
+            return 1;
+        }
+    }
+
     public function jsonSerialize()
     {
         return array_merge($this->getLayout(), [

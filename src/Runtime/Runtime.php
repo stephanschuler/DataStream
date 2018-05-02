@@ -60,17 +60,27 @@ class Runtime
         $state = $this->buildState();
         $workerNodes = $state->getNodes();
 
-        $nodes = [];
-        $edges = [];
+        $nodes = (function (RuntimeState $state, $workerNodes) {
+            $nodes = [];
+            foreach ($workerNodes as $id => $node) {
+                $nodes[$id] = new Node($node, $id, $state->getNodeLabel($node));
+            }
+            return $nodes;
+        })($state, $workerNodes);
 
-        foreach ($workerNodes as $id => $node) {
-            $nodes[] = new Node($node, $id, $state->getNodeLabel($node));
-            if ($node instanceof ProviderInterface) {
-                foreach ($node->getConsumers() as $consumer) {
-                    $edges[] = new Edge($id, array_search($consumer, $workerNodes));
+        $edges = (function ($nodes, $workerNodes) {
+            $edges = [];
+            foreach ($workerNodes as $id => $node) {
+                if ($node instanceof ProviderInterface) {
+                    $fromNode = $nodes[$id];
+                    foreach ($node->getConsumers() as $consumer) {
+                        $toNode = $nodes[array_search($consumer, $workerNodes)];
+                        $edges[] = new Edge($fromNode, $toNode);
+                    }
                 }
             }
-        }
+            return $edges;
+        })($nodes, $workerNodes);
 
         return new Network($nodes, $edges);
     }

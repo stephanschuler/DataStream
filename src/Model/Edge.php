@@ -9,17 +9,27 @@ class Edge implements \JsonSerializable
 
     protected $to;
 
-    public function __construct(int $from, int $to)
+    public function __construct(Node $from, Node $to)
     {
         $this->from = $from;
         $this->to = $to;
     }
 
+    public function getFrom(): Node
+    {
+        return $this->from;
+    }
+
+    public function getTo(): Node
+    {
+        return $this->to;
+    }
+
     public function jsonSerialize()
     {
         return [
-            'from' => $this->from,
-            'to' => $this->to,
+            'from' => $this->getFrom()->getId(),
+            'to' => $this->getTo()->getId(),
             'arrows' => 'to',
             'color' => [
                 'inherit' => 'both'
