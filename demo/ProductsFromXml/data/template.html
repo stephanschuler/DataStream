@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+    <title>Data flow</title>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css"/>
+
+    <style type="text/css">
+        #mynetwork {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        body, window {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="mynetwork"></div>
+<script type="text/javascript">
+    (function (vis) {
+        var container = document.getElementById('mynetwork');
+        var data = JSON.parse('{{network}}');
+        var options = {
+            physics: {
+                solver: 'repulsion'
+            }
+        };
+        new vis.Network(container, data, options);
+    })(vis);
+</script>
+</body>

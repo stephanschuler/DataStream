@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+    <products>
+        <product>
+            <name>Schuh</name>
+            <variants>
+                <variant name="green 42">
+                    <attribute type="color">green</attribute>
+                    <attribute type="size">42</attribute>
+                </variant>
+                <variant name="red 42">
+                    <attribute type="color">red</attribute>
+                    <attribute type="size">42</attribute>
+                </variant>
+                <variant name="green 38">
+                    <attribute type="color">green</attribute>
+                    <attribute type="size">38</attribute>
+                </variant>
+                <variant name="red 38">
+                    <attribute type="color">red</attribute>
+                    <attribute type="size">38</attribute>
+                </variant>
+            </variants>
+            <prices>
+                <price country="DE">100€</price>
+                <price country="US">$100</price>
+            </prices>
+        </product>
+        <product>
+            <name>Helm</name>
+            <variants>
+                <variant name="sprenkel">
+                    <attribute type="color">sprenkel</attribute>
+                </variant>
+                <variant name="flagge">
+                    <attribute type="color">flagge</attribute>
+                </variant>
+            </variants>
+            <prices>
+                <price country="DE">100€</price>
+                <price country="US">$100</price>
+            </prices>
+        </product>
+    </products>
+</root>
