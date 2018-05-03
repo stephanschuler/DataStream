@@ -30,7 +30,7 @@ class Runtime
         $this->definition = $definition;
     }
 
-    public static function define(callable $definition): Runtime
+    public static function defineNetwork(callable $definition): Runtime
     {
         $className = get_called_class();
         return new $className($definition);
