@@ -7,6 +7,8 @@ use StephanSchuler\DataStream\Consumer\ConsumerInterface;
 use StephanSchuler\DataStream\Node\NodeInterface;
 use StephanSchuler\DataStream\Provider\ProviderInterface;
 use StephanSchuler\DataStream\Source\SourceInterface;
+use StephanSchuler\DataStream\Transport\EliminatorInterface;
+use StephanSchuler\DataStream\Transport\GeneratorInterface;
 use StephanSchuler\DataStream\Transport\TransportInterface;
 
 class Node implements \JsonSerializable
@@ -86,18 +88,33 @@ class Node implements \JsonSerializable
 
     public function getWeight()
     {
+        $weight = 1;
         if ($this->node instanceof ProviderInterface) {
-            return count($this->node->getConsumers()) + 1;
-        } else {
-            return 1;
+            $weight += count($this->node->getConsumers()) * 10;
         }
+        if ($this->node instanceof GeneratorInterface) {
+            $weight += 5;
+        }
+        if ($this->node instanceof EliminatorInterface) {
+            $weight -= 5;
+        }
+        return $weight;
     }
 
     public function jsonSerialize()
     {
+        $nodesByType = [
+            Node::TYPE_SOURCE,
+            Node::TYPE_PROVIDER,
+            Node::TYPE_TRANSPORT,
+            Node::TYPE_CONSUMER,
+            Node::TYPE_UNDEFINED,
+        ];
         return array_merge($this->getLayout(), [
             'id' => (string)$this->getId(),
             'label' => $this->getLabel(),
+            'group' => $this->getType(),
+            'level' => array_search($this->getType(), $nodesByType)
         ]);
     }
 }

@@ -6,7 +6,7 @@ namespace StephanSchuler\DataStream\Transport;
 use StephanSchuler\DataStream\Consumer\StatefulInterface;
 use StephanSchuler\DataStream\Runtime\StateBuilder;
 
-class DistinctUntilChanged implements TransportInterface, StatefulInterface
+class DistinctUntilChanged implements TransportInterface, StatefulInterface, EliminatorInterface
 {
     use TransportTrait;
 

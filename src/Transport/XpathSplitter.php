@@ -5,7 +5,7 @@ namespace StephanSchuler\DataStream\Transport;
 
 use SimpleXMLElement;
 
-class XpathSplitter implements TransportInterface
+class XpathSplitter implements TransportInterface, GeneratorInterface
 {
     use SplitterTrait;
 
