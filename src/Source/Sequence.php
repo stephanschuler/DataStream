@@ -6,7 +6,7 @@ namespace StephanSchuler\DataStream\Source;
 use ArrayIterator;
 use Iterator;
 use StephanSchuler\DataStream\Provider\ProviderTrait;
-use StephanSchuler\DataStream\Runtime\RuntimeState;
+use StephanSchuler\DataStream\Runtime\StateBuilder;
 
 class Sequence implements SourceInterface
 {
@@ -19,7 +19,7 @@ class Sequence implements SourceInterface
 
     protected function __construct(Iterator $source)
     {
-        RuntimeState::getInstance()->addNode($this);
+        StateBuilder::getInstance()->addNode($this);
         $this->source = $source;
     }
 

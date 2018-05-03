@@ -6,13 +6,8 @@ namespace StephanSchuler\DataStream\Runtime;
 use StephanSchuler\DataStream\Node\NodeInterface;
 use StephanSchuler\DataStream\Source\SourceInterface;
 
-class RuntimeState
+class State
 {
-    /**
-     * @var array
-     */
-    private $settings = [];
-
     /**
      * @var SourceInterface[]
      */
@@ -28,32 +23,12 @@ class RuntimeState
      */
     private $labels = [];
 
-    public function __construct(array $settings = [])
-    {
-        $this->settings = $settings;
-    }
-
-    public static function getInstance(): RuntimeState
-    {
-        return Runtime::getState();
-    }
-
-    public function getSettings()
-    {
-        return $this->settings;
-    }
-
-    public function getSetting($name)
-    {
-        return $this->settings[$name];
-    }
-
     public function getSources()
     {
         return $this->sources;
     }
 
-    public function setSource(SourceInterface ...$sources): RuntimeState
+    public function setSource(SourceInterface ...$sources): State
     {
         $this->sources = $sources;
         return $this;
@@ -64,7 +39,7 @@ class RuntimeState
         return $this->nodes;
     }
 
-    public function addNode(NodeInterface $node): RuntimeState
+    public function addNode(NodeInterface $node): State
     {
         $this->nodes[] = $node;
         if ($node instanceof SourceInterface) {
@@ -84,7 +59,7 @@ class RuntimeState
         }
     }
 
-    public function setNodeLabel(NodeInterface $node, string $label): RuntimeState
+    public function setNodeLabel(NodeInterface $node, string $label): State
     {
         $this->labels[spl_object_hash($node)] = $label;
         return $this;

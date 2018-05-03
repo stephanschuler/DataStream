@@ -97,7 +97,7 @@ class Node implements \JsonSerializable
     {
         return array_merge($this->getLayout(), [
             'id' => (string)$this->getId(),
-            'label' => sprintf('%s (%s:%d)', $this->getLabel(), $this->getType(), $this->getWeight()),
+            'label' => $this->getLabel(),
         ]);
     }
 }

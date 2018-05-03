@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Transport;
 
-use StephanSchuler\DataStream\Runtime\RuntimeState;
+use StephanSchuler\DataStream\Runtime\StateBuilder;
 
 trait SplitterTrait
 {
@@ -16,7 +16,7 @@ trait SplitterTrait
 
     protected function __construct(callable $definition)
     {
-        RuntimeState::getInstance()->addNode($this);
+        StateBuilder::getInstance()->addNode($this);
         $this->definition = $definition;
     }
 

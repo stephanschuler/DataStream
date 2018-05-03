@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Transport;
 
-use StephanSchuler\DataStream\Runtime\RuntimeState;
+use StephanSchuler\DataStream\Runtime\StateBuilder;
 
 class Merger implements TransportInterface
 {
@@ -11,7 +11,7 @@ class Merger implements TransportInterface
 
     protected function __construct()
     {
-        RuntimeState::getInstance()->addNode($this);
+        StateBuilder::getInstance()->addNode($this);
     }
 
     public static function createTransport(): Merger

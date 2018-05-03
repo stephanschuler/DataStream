@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Consumer;
 
-use StephanSchuler\DataStream\Runtime\RuntimeState;
+use StephanSchuler\DataStream\Runtime\StateBuilder;
 
 class Remember implements ConsumerInterface, StatefulInterface
 {
@@ -13,7 +13,7 @@ class Remember implements ConsumerInterface, StatefulInterface
 
     protected function __construct()
     {
-        RuntimeState::getInstance()->addNode($this);
+        StateBuilder::getInstance()->addNode($this);
     }
 
     public static function createConsumer(): Remember

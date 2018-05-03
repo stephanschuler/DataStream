@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Source;
 
 use StephanSchuler\DataStream\Provider\ProviderTrait;
-use StephanSchuler\DataStream\Runtime\RuntimeState;
+use StephanSchuler\DataStream\Runtime\StateBuilder;
 use XMLElementIterator;
 use XMLElementXpathFilter;
 use XMLReader;
@@ -26,7 +26,7 @@ class XmlStream implements SourceInterface
 
     protected function __construct(string $fileName, string $xpath)
     {
-        RuntimeState::getInstance()->addNode($this);
+        StateBuilder::getInstance()->addNode($this);
         $this->fileName = $fileName;
         $this->xpath = $xpath;
     }

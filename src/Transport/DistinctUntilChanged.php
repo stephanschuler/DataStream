@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Transport;
 
 use StephanSchuler\DataStream\Consumer\StatefulInterface;
-use StephanSchuler\DataStream\Runtime\RuntimeState;
+use StephanSchuler\DataStream\Runtime\StateBuilder;
 
 class DistinctUntilChanged implements TransportInterface, StatefulInterface
 {
@@ -19,7 +19,7 @@ class DistinctUntilChanged implements TransportInterface, StatefulInterface
 
     protected function __construct(callable $compare = null)
     {
-        RuntimeState::getInstance()->addNode($this);
+        StateBuilder::getInstance()->addNode($this);
         $this->compare = $compare;
     }
 

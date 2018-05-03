@@ -21,9 +21,9 @@ class Runtime
     private $settings = [];
 
     /**
-     * @var RuntimeState[]
+     * @var StateBuilder[]
      */
-    private static $states = [];
+    private static $builders = [];
 
     protected function __construct(callable $definition)
     {
@@ -36,9 +36,9 @@ class Runtime
         return new $className($definition);
     }
 
-    public static function getState(): RuntimeState
+    public static function getCurrentBuilder(): StateBuilder
     {
-        return current(self::$states);
+        return current(self::$builders);
     }
 
     public function addSettings(array $settings): Runtime
@@ -60,7 +60,7 @@ class Runtime
         $state = $this->buildState();
         $workerNodes = $state->getNodes();
 
-        $nodes = (function (RuntimeState $state, $workerNodes) {
+        $nodes = (function (State $state, $workerNodes) {
             $nodes = [];
             foreach ($workerNodes as $id => $node) {
                 $nodes[$id] = new Node($node, $id, $state->getNodeLabel($node));
@@ -85,16 +85,17 @@ class Runtime
         return new Network($nodes, $edges);
     }
 
-    protected function buildState(): RuntimeState
+    protected function buildState(): State
     {
-        $state = new RuntimeState($this->settings);
+        $state = new State();
+        $builder = new StateBuilder($state, $this->settings);
 
-        array_push(self::$states, $state);
+        array_push(self::$builders, $builder);
 
         $flow = $this->definition;
-        $flow($state);
+        $flow($builder);
 
-        array_pop(self::$states);
+        array_pop(self::$builders);
 
         return $state;
     }
