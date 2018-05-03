@@ -54,7 +54,7 @@ trait TransportTrait
      */
     protected function feedConsumers($data)
     {
-        foreach ($this->getConsumers() as $consumer) {
+        foreach (array_reverse($this->getConsumers()) as $consumer) {
             $consumer->consume($data);
         }
     }
