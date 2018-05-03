@@ -30,9 +30,7 @@ class DistinctUntilChanged implements TransportInterface, StatefulInterface
             return;
         }
         $this->lastItem = $comparable;
-        foreach ($this->consumers as $consumer) {
-            $consumer->consume($data);
-        }
+        $this->feedConsumers($data);
     }
 
     public function get()

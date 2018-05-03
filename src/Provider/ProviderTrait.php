@@ -24,4 +24,11 @@ trait ProviderTrait
     {
         return $this->consumers;
     }
+
+    protected function feedConsumers($data)
+    {
+        foreach ($this->getConsumers() as $consumer) {
+            $consumer->consume($data);
+        }
+    }
 }

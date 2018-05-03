@@ -24,9 +24,7 @@ trait SplitterTrait
     {
         $generator = ($this->definition)($data);
         foreach ($generator as $partData) {
-            foreach ($this->consumers as $consumer) {
-                $consumer->consume($partData);
-            }
+            $this->feedConsumers($partData);
         }
     }
 

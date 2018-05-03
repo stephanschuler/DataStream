@@ -23,9 +23,7 @@ class Mapper implements TransportInterface
     public function consume($data)
     {
         $newData = ($this->definition)($data);
-        foreach ($this->consumers as $consumer) {
-            $consumer->consume($newData);
-        }
+        $this->feedConsumers($newData);
     }
 
     public static function createTransport(callable $definition): Mapper

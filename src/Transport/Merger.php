@@ -22,8 +22,6 @@ class Merger implements TransportInterface
 
     public function consume($data)
     {
-        foreach ($this->consumers as $consumer) {
-            $consumer->consume($data);
-        }
+        $this->feedConsumers($data);
     }
 }

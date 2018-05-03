@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Provider;
+namespace StephanSchuler\DataStream\Source;
 
 use ArrayIterator;
 use Iterator;
+use StephanSchuler\DataStream\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\RuntimeState;
 
-class Sequence implements ProviderInterface
+class Sequence implements SourceInterface
 {
     use ProviderTrait;
 
@@ -25,27 +26,25 @@ class Sequence implements ProviderInterface
     public function provide()
     {
         foreach ($this->source as $element) {
-            foreach ($this->consumers as $consumer) {
-                $consumer->consume($element);
-            }
+            $this->feedConsumers($element);
         }
     }
 
-    public static function createProvider(Iterator $source): Sequence
+    public static function createSource(Iterator $source): Sequence
     {
         $className = get_called_class();
         return new $className($source);
     }
 
-    public static function createProviderFromArray(array $source): Sequence
+    public static function createSourceFromArray(array $source): Sequence
     {
-        $callable = [get_called_class(), 'createProvider'];
+        $callable = [get_called_class(), 'createSource'];
         return $callable(new ArrayIterator($source));
     }
 
-    public static function createProviderOf(...$source): Sequence
+    public static function createSourceOf(...$source): Sequence
     {
-        $callable = [get_called_class(), 'createProviderFromArray'];
+        $callable = [get_called_class(), 'createSourceFromArray'];
         return $callable($source);
     }
 }

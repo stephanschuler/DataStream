@@ -54,6 +54,7 @@ class Network implements \JsonSerializable
     protected static function sortNodes(Node ...$nodes)
     {
         $nodesByType = [
+            Node::TYPE_SOURCE => [],
             Node::TYPE_PROVIDER => [],
             Node::TYPE_TRANSPORT => [],
             Node::TYPE_CONSUMER => [],

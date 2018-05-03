@@ -3,30 +3,59 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Transport;
 
+use StephanSchuler\DataStream\Consumer\ConsumerInterface;
 use StephanSchuler\DataStream\Provider\ProviderInterface;
-use StephanSchuler\DataStream\Provider\ProviderTrait;
 
 trait TransportTrait
 {
-    use ProviderTrait;
-
     /**
      * @var ProviderInterface[]
      */
-    protected $provider = [];
+    protected $providers = [];
 
+    /**
+     * @param ProviderInterface $provider
+     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     */
     public function providedBy(ProviderInterface $provider)
     {
         /** @var TransportInterface $this */
         $provider->consumedBy($this);
-        $this->provider[] = $provider;
+        $this->providers[] = $provider;
     }
 
-    public function provide()
+    /**
+     * @var ConsumerInterface[]
+     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     */
+    protected $consumers = [];
+
+    /**
+     * @param ConsumerInterface $consumer
+     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     */
+    public function consumedBy(ConsumerInterface $consumer)
     {
-        foreach ($this->provider as $provider) {
-            $provider->provide();
+        $this->consumers[] = $consumer;
+    }
+
+    /**
+     * @return ConsumerInterface[]
+     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     */
+    public function getConsumers()
+    {
+        return $this->consumers;
+    }
+
+    /**
+     * @param $data
+     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     */
+    protected function feedConsumers($data)
+    {
+        foreach ($this->getConsumers() as $consumer) {
+            $consumer->consume($data);
         }
     }
-
 }

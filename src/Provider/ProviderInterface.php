@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Provider;
 
 use StephanSchuler\DataStream\Consumer\ConsumerInterface;
-use StephanSchuler\DataStream\Node\NodeInterface;
 
-interface ProviderInterface extends NodeInterface
+interface ProviderInterface
 {
     public function consumedBy(ConsumerInterface $consumer);
 
@@ -14,6 +13,4 @@ interface ProviderInterface extends NodeInterface
      * @return ConsumerInterface[]
      */
     public function getConsumers();
-
-    public function provide();
 }

@@ -1,15 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Provider;
+namespace StephanSchuler\DataStream\Source;
 
+use StephanSchuler\DataStream\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\RuntimeState;
 use XMLElementIterator;
 use XMLElementXpathFilter;
 use XMLReader;
 use XMLReaderNode;
 
-class XmlStream implements ProviderInterface
+class XmlStream implements SourceInterface
 {
     use ProviderTrait;
 
@@ -39,15 +40,13 @@ class XmlStream implements ProviderInterface
         $list = new XMLElementXpathFilter($iterator, $this->xpath);
         /** @var XMLReaderNode $element */
         foreach ($list as $element) {
-            foreach ($this->consumers as $consumer) {
-                $consumer->consume($element->getSimpleXMLElement());
-            }
+            $this->feedConsumers($element->getSimpleXMLElement());
         }
 
         $reader->close();
     }
 
-    public static function createProvider(string $fileName, string $xpath = '/*'): XmlStream
+    public static function createSource(string $fileName, string $xpath = '/*'): XmlStream
     {
         $className = get_called_class();
         return new $className($fileName, $xpath);

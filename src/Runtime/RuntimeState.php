@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Runtime;
 
-use StephanSchuler\DataStream\Consumer\ConsumerInterface;
 use StephanSchuler\DataStream\Node\NodeInterface;
-use StephanSchuler\DataStream\Provider\ProviderInterface;
+use StephanSchuler\DataStream\Source\SourceInterface;
 
 class RuntimeState
 {
@@ -15,7 +14,7 @@ class RuntimeState
     private $settings = [];
 
     /**
-     * @var ProviderInterface[]
+     * @var SourceInterface[]
      */
     private $sources = [];
 
@@ -54,7 +53,7 @@ class RuntimeState
         return $this->sources;
     }
 
-    public function setSource(ProviderInterface ...$sources): RuntimeState
+    public function setSource(SourceInterface ...$sources): RuntimeState
     {
         $this->sources = $sources;
         return $this;
@@ -68,7 +67,7 @@ class RuntimeState
     public function addNode(NodeInterface $node): RuntimeState
     {
         $this->nodes[] = $node;
-        if ($node instanceof ProviderInterface && !$node instanceof ConsumerInterface) {
+        if ($node instanceof SourceInterface) {
             $this->sources[] = $node;
         }
         return $this;

@@ -6,9 +6,13 @@ namespace StephanSchuler\DataStream\Model;
 use StephanSchuler\DataStream\Consumer\ConsumerInterface;
 use StephanSchuler\DataStream\Node\NodeInterface;
 use StephanSchuler\DataStream\Provider\ProviderInterface;
+use StephanSchuler\DataStream\Source\SourceInterface;
+use StephanSchuler\DataStream\Transport\TransportInterface;
 
 class Node implements \JsonSerializable
 {
+    const TYPE_SOURCE = 'source';
+
     const TYPE_TRANSPORT = 'transport';
 
     const TYPE_PROVIDER = 'provider';
@@ -35,7 +39,9 @@ class Node implements \JsonSerializable
         $this->node = $node;
         $this->id = $id;
 
-        if ($node instanceof ProviderInterface && $node instanceof ConsumerInterface) {
+        if ($node instanceof SourceInterface) {
+            $this->type = self::TYPE_SOURCE;
+        } elseif ($node instanceof TransportInterface) {
             $this->type = self::TYPE_TRANSPORT;
         } elseif ($node instanceof ProviderInterface) {
             $this->type = self::TYPE_PROVIDER;
@@ -91,7 +97,7 @@ class Node implements \JsonSerializable
     {
         return array_merge($this->getLayout(), [
             'id' => (string)$this->getId(),
-            'label' => $this->getLabel(),
+            'label' => sprintf('%s (%s:%d)', $this->getLabel(), $this->getType(), $this->getWeight()),
         ]);
     }
 }
