@@ -89,9 +89,6 @@ class Node implements \JsonSerializable
     public function getWeight()
     {
         $weight = 1;
-        if ($this->node instanceof ProviderInterface) {
-            $weight += count($this->node->getConsumers()) * 10;
-        }
         if ($this->node instanceof GeneratorInterface) {
             $weight += 5;
         }
