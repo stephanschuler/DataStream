@@ -7,7 +7,7 @@ use StephanSchuler\DataStream\Node\Consumer\ConsumerInterface;
 
 interface ProviderInterface
 {
-    public function consumedBy(ConsumerInterface $consumer);
+    public function consumedBy(ConsumerInterface $consumer, string $wireName = '');
 
     /**
      * @return ConsumerInterface[]

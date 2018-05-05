@@ -21,7 +21,7 @@ class Merger implements TransportInterface
         return new $className();
     }
 
-    public function consume($data)
+    public function consume($data, $wireName = '')
     {
         Scheduler::globalInstance()->schedule(function () use ($data) {
 

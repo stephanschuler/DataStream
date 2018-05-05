@@ -7,9 +7,9 @@ use StephanSchuler\DataStream\Node\Provider\ProviderInterface;
 
 trait ConsumerTrait
 {
-    public function providedBy(ProviderInterface $provider)
+    public function providedBy(ProviderInterface $provider, string $wireName = '')
     {
         /** @var ConsumerInterface $this */
-        $provider->consumedBy($this);
+        $provider->consumedBy($this, $wireName);
     }
 }

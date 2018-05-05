@@ -22,7 +22,7 @@ class Remember implements ConsumerInterface, StatefulInterface
         return new $className();
     }
 
-    public function consume($data)
+    public function consume($data, $wireName = '')
     {
         $this->remember = $data;
     }

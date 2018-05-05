@@ -12,9 +12,13 @@ trait ProviderTrait
      */
     protected $consumers = [];
 
-    public function consumedBy(ConsumerInterface $consumer)
+    public function consumedBy(ConsumerInterface $consumer, string $wireName = '')
     {
-        $this->consumers[] = $consumer;
+        if ($wireName) {
+            $this->consumers[$wireName] = $consumer;
+        } else {
+            $this->consumers[] = $consumer;
+        }
     }
 
     /**
@@ -27,8 +31,8 @@ trait ProviderTrait
 
     protected function feedConsumers($data)
     {
-        foreach ($this->getConsumers() as $consumer) {
-            $consumer->consume($data);
+        foreach ($this->getConsumers() as $wireName => $consumer) {
+            $consumer->consume($data, $wireName);
         }
     }
 }

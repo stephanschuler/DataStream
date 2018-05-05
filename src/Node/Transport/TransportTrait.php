@@ -16,13 +16,18 @@ trait TransportTrait
 
     /**
      * @param ProviderInterface $provider
+     * @param string $wireName
      * @see \StephanSchuler\DataStream\Node\Consumer\ConsumerTrait::providedBy()
      */
-    public function providedBy(ProviderInterface $provider)
+    public function providedBy(ProviderInterface $provider, string $wireName = '')
     {
         /** @var TransportInterface $this */
-        $provider->consumedBy($this);
-        $this->providers[] = $provider;
+        $provider->consumedBy($this, $wireName);
+        if ($wireName) {
+            $this->providers[$wireName] = $provider;
+        } else {
+            $this->providers[] = $provider;
+        }
     }
 
     /**
@@ -33,11 +38,16 @@ trait TransportTrait
 
     /**
      * @param ConsumerInterface $consumer
+     * @param string $wireName
      * @see \StephanSchuler\DataStream\Node\Consumer\ConsumerTrait::providedBy()
      */
-    public function consumedBy(ConsumerInterface $consumer)
+    public function consumedBy(ConsumerInterface $consumer, string $wireName = '')
     {
-        $this->consumers[] = $consumer;
+        if ($wireName) {
+            $this->consumers[$wireName] = $consumer;
+        } else {
+            $this->consumers[] = $consumer;
+        }
     }
 
     /**
@@ -57,9 +67,9 @@ trait TransportTrait
     {
         Scheduler::globalInstance()->schedule(function () use ($data) {
 
-            foreach (($this->getConsumers()) as $consumer) {
+            foreach (($this->getConsumers()) as $wireName => $consumer) {
                 yield;
-                $consumer->consume($data);
+                $consumer->consume($data, $wireName);
             }
 
         });

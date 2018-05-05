@@ -21,7 +21,7 @@ class Filter implements TransportInterface, EliminatorInterface
         $this->definition = $definition;
     }
 
-    public function consume($data)
+    public function consume($data, $wireName = '')
     {
         Scheduler::globalInstance()->schedule(function () use ($data) {
 

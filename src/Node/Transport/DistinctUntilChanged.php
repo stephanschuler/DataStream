@@ -24,7 +24,7 @@ class DistinctUntilChanged implements TransportInterface, StatefulInterface, Eli
         $this->compare = $compare;
     }
 
-    public function consume($data)
+    public function consume($data, $wireName = '')
     {
         Scheduler::globalInstance()->schedule(function () use ($data) {
 

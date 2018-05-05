@@ -54,7 +54,7 @@ class Csv implements ConsumerInterface
         return new $className($fileName, $delimiter, $enclosure, $escape);
     }
 
-    public function consume($data)
+    public function consume($data, $wireName = '')
     {
         $fp = fopen($this->fileName, 'a+');
         fputcsv($fp, $data, $this->delimiter, $this->enclosure, $this->escape);

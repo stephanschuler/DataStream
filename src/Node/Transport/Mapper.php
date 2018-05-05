@@ -21,7 +21,7 @@ class Mapper implements TransportInterface
         $this->definition = $definition;
     }
 
-    public function consume($data)
+    public function consume($data, $wireName = '')
     {
         Scheduler::globalInstance()->schedule(function () use ($data) {
 

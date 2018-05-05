@@ -81,9 +81,11 @@ class Process
             foreach ($workerNodes as $id => $node) {
                 if ($node instanceof ProviderInterface) {
                     $fromNode = $nodes[$id];
-                    foreach ($node->getConsumers() as $consumer) {
+                    $priority = 0;
+                    foreach ($node->getConsumers() as $wireName => $consumer) {
                         $toNode = $nodes[array_search($consumer, $workerNodes)];
-                        $edges[] = new Edge($fromNode, $toNode);
+                        $edges[] = new Edge($fromNode, $toNode, (string)$wireName, $priority);
+                        $priority++;
                     }
                 }
             }

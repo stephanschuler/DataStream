@@ -10,5 +10,5 @@ interface ConsumerInterface extends NodeInterface
 {
     public function providedBy(ProviderInterface $provider);
 
-    public function consume($data);
+    public function consume($data, $wireName = '');
 }

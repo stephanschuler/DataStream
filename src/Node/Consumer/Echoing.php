@@ -10,7 +10,7 @@ class Echoing implements ConsumerInterface
     use ConsumerTrait;
 
     const TEMPLATE = '
-<h1>%s</h1>
+<h1>%s (%s)</h1>
 <pre>%s</pre>
 ';
 
@@ -28,8 +28,8 @@ class Echoing implements ConsumerInterface
         return new $className($name);
     }
 
-    public function consume($data)
+    public function consume($data, $wireName = '')
     {
-        echo sprintf(self::TEMPLATE, $this->name, htmlspecialchars(print_r($data, true)));
+        echo sprintf(self::TEMPLATE, $this->name, htmlspecialchars((string)$wireName), htmlspecialchars(print_r($data, true)));
     }
 }
