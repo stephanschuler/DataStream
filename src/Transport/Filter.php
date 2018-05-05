@@ -23,7 +23,7 @@ class Filter implements TransportInterface, EliminatorInterface
 
     public function consume($data)
     {
-        Scheduler::current()->schedule(function () use ($data) {
+        Scheduler::globalInstance()->schedule(function () use ($data) {
 
             yield;
 

@@ -20,6 +20,8 @@ class Scheduler
      */
     protected $task;
 
+    protected $ticks = 0;
+
     public function __construct()
     {
         $this->tasks = new Loop();
@@ -34,6 +36,7 @@ class Scheduler
     public function run()
     {
         while ($this->tasks->count()) {
+            $this->ticks++;
             $this->task = $this->tasks->next();
 
             $tickResult = ($this->task)();
@@ -45,25 +48,28 @@ class Scheduler
         }
     }
 
-    public static function withScheduler(callable $callback)
+    public static function withGlobalInstance(callable $callback)
     {
-        if (Scheduler::$current) {
-            throw new \Exception('There can only be');
-        }
+        $before = Scheduler::$current;
 
         $class = get_called_class();
         Scheduler::$current = new $class;
         $callback();
-        Scheduler::$current = null;
+        Scheduler::$current = $before;
     }
 
-    public static function current()
+    public static function globalInstance(): Scheduler
     {
         return self::$current;
     }
 
+    public function getTicks()
+    {
+        return $this->ticks;
+    }
+
     protected function getPriority(): int
     {
-        return $this->task ? $this->task->getPriority() + 1 : 1;
+        return ($this->task ? $this->task->getPriority() : 0) + 1;
     }
 }

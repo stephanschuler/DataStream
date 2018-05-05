@@ -56,7 +56,7 @@ trait TransportTrait
      */
     protected function feedConsumers($data)
     {
-        Scheduler::current()->schedule(function () use ($data) {
+        Scheduler::globalInstance()->schedule(function () use ($data) {
 
             foreach (($this->getConsumers()) as $consumer) {
                 yield;

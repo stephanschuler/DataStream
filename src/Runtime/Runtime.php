@@ -54,11 +54,11 @@ class Runtime
      */
     public function run(): Runtime
     {
-        Scheduler::withScheduler(function () {
+        Scheduler::withGlobalInstance(function () {
             foreach ($this->buildState()->getSources() as $source) {
                 $source->provide();
             }
-            Scheduler::current()->run();
+            Scheduler::globalInstance()->run();
         });
         return $this;
     }

@@ -27,7 +27,7 @@ class Sequence implements SourceInterface
 
     public function provide()
     {
-        Scheduler::current()->schedule(function () {
+        Scheduler::globalInstance()->schedule(function () {
 
             foreach ($this->source as $element) {
                 yield;

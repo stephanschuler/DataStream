@@ -24,7 +24,7 @@ trait SplitterTrait
 
     public function consume($data)
     {
-        Scheduler::current()->schedule(function () use ($data) {
+        Scheduler::globalInstance()->schedule(function () use ($data) {
 
             $generator = ($this->definition)($data);
             foreach ($generator as $partData) {

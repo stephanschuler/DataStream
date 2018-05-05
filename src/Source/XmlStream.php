@@ -35,7 +35,7 @@ class XmlStream implements SourceInterface
 
     public function provide()
     {
-        Scheduler::current()->schedule(function () {
+        Scheduler::globalInstance()->schedule(function () {
 
             $reader = new XMLReader();
             $reader->open($this->fileName);

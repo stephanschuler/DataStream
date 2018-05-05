@@ -42,7 +42,7 @@ class Csv implements SourceInterface
 
     public function provide()
     {
-        Scheduler::current()->schedule(function () {
+        Scheduler::globalInstance()->schedule(function () {
             $fp = fopen($this->fileName, 'r');
             while ($line = fgetcsv($fp, 0, $this->delimiter, $this->enclosure, $this->escape)) {
                 yield;

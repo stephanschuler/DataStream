@@ -24,7 +24,7 @@ class Mapper implements TransportInterface
 
     public function consume($data)
     {
-        Scheduler::current()->schedule(function () use ($data) {
+        Scheduler::globalInstance()->schedule(function () use ($data) {
 
             yield;
 
