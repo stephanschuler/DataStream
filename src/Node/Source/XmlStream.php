@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Source;
+namespace StephanSchuler\DataStream\Node\Source;
 
-use StephanSchuler\DataStream\Provider\ProviderTrait;
+use StephanSchuler\DataStream\Node\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Task;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 use XMLElementIterator;
 use XMLElementXpathFilter;

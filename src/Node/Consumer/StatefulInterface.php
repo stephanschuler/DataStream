@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Consumer;
+namespace StephanSchuler\DataStream\Node\Consumer;
 
 interface StatefulInterface
 {

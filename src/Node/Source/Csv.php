@@ -1,13 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Consumer;
+namespace StephanSchuler\DataStream\Node\Source;
 
+use StephanSchuler\DataStream\Node\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
-class Csv implements ConsumerInterface
+class Csv implements SourceInterface
 {
-    use ConsumerTrait;
+    use ProviderTrait;
 
     /**
      * @var string
@@ -29,14 +31,8 @@ class Csv implements ConsumerInterface
      */
     protected $escape;
 
-    protected $name;
-
-    protected function __construct(
-        string $fileName,
-        string $delimiter = ',',
-        string $enclosure = '"',
-        string $escape = '\\'
-    ) {
+    protected function __construct(string $fileName, string $delimiter, string $enclosure, string $escape)
+    {
         GraphBuilder::getInstance()->addNode($this);
         $this->fileName = $fileName;
         $this->delimiter = $delimiter;
@@ -44,20 +40,25 @@ class Csv implements ConsumerInterface
         $this->escape = $escape;
     }
 
-    public static function createConsumer(
+    public function provide()
+    {
+        Scheduler::globalInstance()->schedule(function () {
+            $fp = fopen($this->fileName, 'r');
+            while ($line = fgetcsv($fp, 0, $this->delimiter, $this->enclosure, $this->escape)) {
+                yield;
+                $this->feedConsumers($line);
+            }
+            fclose($fp);
+        });
+    }
+
+    public static function createSource(
         string $fileName,
         string $delimiter = ',',
         string $enclosure = '"',
         string $escape = '\\'
-    ): Echoing {
+    ): Csv {
         $className = get_called_class();
         return new $className($fileName, $delimiter, $enclosure, $escape);
-    }
-
-    public function consume($data)
-    {
-        $fp = fopen($this->fileName, 'a+');
-        fputcsv($fp, $data, $this->delimiter, $this->enclosure, $this->escape);
-        fclose($fp);
     }
 }

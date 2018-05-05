@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Consumer;
+namespace StephanSchuler\DataStream\Node\Consumer;
 
 use StephanSchuler\DataStream\Node\NodeInterface;
-use StephanSchuler\DataStream\Provider\ProviderInterface;
+use StephanSchuler\DataStream\Node\Provider\ProviderInterface;
 
 interface ConsumerInterface extends NodeInterface
 {

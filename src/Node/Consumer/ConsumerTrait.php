@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Consumer;
+namespace StephanSchuler\DataStream\Node\Consumer;
 
-use StephanSchuler\DataStream\Provider\ProviderInterface;
+use StephanSchuler\DataStream\Node\Provider\ProviderInterface;
 
 trait ConsumerTrait
 {

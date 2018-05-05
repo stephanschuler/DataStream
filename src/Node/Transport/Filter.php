@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Transport;
+namespace StephanSchuler\DataStream\Node\Transport;
 
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Task;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
-trait SplitterTrait
+class Filter implements TransportInterface, EliminatorInterface
 {
     use TransportTrait;
 
@@ -26,13 +25,18 @@ trait SplitterTrait
     {
         Scheduler::globalInstance()->schedule(function () use ($data) {
 
-            $generator = ($this->definition)($data);
-            foreach ($generator as $partData) {
-                yield;
-                $this->feedConsumers($partData);
+            yield;
+
+            if (($this->definition)($data)) {
+                $this->feedConsumers($data);
             }
 
         });
     }
 
+    public static function createTransport(callable $definition): Filter
+    {
+        $className = get_called_class();
+        return new $className($definition);
+    }
 }

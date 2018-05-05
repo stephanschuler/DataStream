@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Transport;
+namespace StephanSchuler\DataStream\Node\Transport;
 
 class Splitter implements TransportInterface, GeneratorInterface
 {

@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Transport;
+namespace StephanSchuler\DataStream\Node\Transport;
 
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
-class XpathMapper implements TransportInterface
+class Mapper implements TransportInterface
 {
     use TransportTrait;
 
     /**
-     * @var array
+     * @var \callable
      */
     protected $definition;
 
-    protected function __construct(array $definition)
+    protected function __construct(callable $definition)
     {
         GraphBuilder::getInstance()->addNode($this);
         $this->definition = $definition;
@@ -27,16 +27,13 @@ class XpathMapper implements TransportInterface
 
             yield;
 
-            /** @var \SimpleXMLElement $data */
-            $newData = array_map(function ($xpath) use ($data) {
-                return (string)current($data->xpath($xpath));
-            }, $this->definition);
+            $newData = ($this->definition)($data);
             $this->feedConsumers($newData);
 
         });
     }
 
-    public static function createTransport(array $definition): XpathMapper
+    public static function createTransport(callable $definition): Mapper
     {
         $className = get_called_class();
         return new $className($definition);

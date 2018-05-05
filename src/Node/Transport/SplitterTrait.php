@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Transport;
+namespace StephanSchuler\DataStream\Node\Transport;
 
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Task;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
-class Mapper implements TransportInterface
+trait SplitterTrait
 {
     use TransportTrait;
 
@@ -26,17 +25,13 @@ class Mapper implements TransportInterface
     {
         Scheduler::globalInstance()->schedule(function () use ($data) {
 
-            yield;
-
-            $newData = ($this->definition)($data);
-            $this->feedConsumers($newData);
+            $generator = ($this->definition)($data);
+            foreach ($generator as $partData) {
+                yield;
+                $this->feedConsumers($partData);
+            }
 
         });
     }
 
-    public static function createTransport(callable $definition): Mapper
-    {
-        $className = get_called_class();
-        return new $className($definition);
-    }
 }

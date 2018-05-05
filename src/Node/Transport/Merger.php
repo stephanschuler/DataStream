@@ -1,10 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Transport;
+namespace StephanSchuler\DataStream\Node\Transport;
 
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Task;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class Merger implements TransportInterface

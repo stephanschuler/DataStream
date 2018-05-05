@@ -1,14 +1,14 @@
 <?php
 
-use StephanSchuler\DataStream\Consumer\Echoing;
-use StephanSchuler\DataStream\Consumer\Remember;
+use StephanSchuler\DataStream\Node\Consumer\Echoing;
+use StephanSchuler\DataStream\Node\Consumer\Remember;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
 use StephanSchuler\DataStream\Runtime\Process;
-use StephanSchuler\DataStream\Source\XmlStream;
-use StephanSchuler\DataStream\Transport\Filter;
-use StephanSchuler\DataStream\Transport\Mapper;
-use StephanSchuler\DataStream\Transport\Merger;
-use StephanSchuler\DataStream\Transport\XpathSplitter;
+use StephanSchuler\DataStream\Node\Source\XmlStream;
+use StephanSchuler\DataStream\Node\Transport\Filter;
+use StephanSchuler\DataStream\Node\Transport\Mapper;
+use StephanSchuler\DataStream\Node\Transport\Merger;
+use StephanSchuler\DataStream\Node\Transport\XpathSplitter;
 
 return Process::define(function (GraphBuilder $runtime) {
 

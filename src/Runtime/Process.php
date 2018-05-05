@@ -6,7 +6,7 @@ namespace StephanSchuler\DataStream\Runtime;
 use StephanSchuler\DataStream\Model\Edge;
 use StephanSchuler\DataStream\Model\Network;
 use StephanSchuler\DataStream\Model\Node;
-use StephanSchuler\DataStream\Provider\ProviderInterface;
+use StephanSchuler\DataStream\Node\Provider\ProviderInterface;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class Process

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Model;
 
-use StephanSchuler\DataStream\Provider\ProviderInterface;
+use StephanSchuler\DataStream\Node\Provider\ProviderInterface;
 
 class Network implements \JsonSerializable
 {

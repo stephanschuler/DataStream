@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Model;
 
-use StephanSchuler\DataStream\Consumer\ConsumerInterface;
+use StephanSchuler\DataStream\Node\Consumer\ConsumerInterface;
 use StephanSchuler\DataStream\Node\NodeInterface;
-use StephanSchuler\DataStream\Provider\ProviderInterface;
-use StephanSchuler\DataStream\Source\SourceInterface;
-use StephanSchuler\DataStream\Transport\EliminatorInterface;
-use StephanSchuler\DataStream\Transport\GeneratorInterface;
-use StephanSchuler\DataStream\Transport\TransportInterface;
+use StephanSchuler\DataStream\Node\Provider\ProviderInterface;
+use StephanSchuler\DataStream\Node\Source\SourceInterface;
+use StephanSchuler\DataStream\Node\Transport\EliminatorInterface;
+use StephanSchuler\DataStream\Node\Transport\GeneratorInterface;
+use StephanSchuler\DataStream\Node\Transport\TransportInterface;
 
 class Node implements \JsonSerializable
 {

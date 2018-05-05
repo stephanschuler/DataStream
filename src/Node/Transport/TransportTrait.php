@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Transport;
+namespace StephanSchuler\DataStream\Node\Transport;
 
-use StephanSchuler\DataStream\Consumer\ConsumerInterface;
-use StephanSchuler\DataStream\Provider\ProviderInterface;
-use StephanSchuler\DataStream\Scheduler\Task;
+use StephanSchuler\DataStream\Node\Consumer\ConsumerInterface;
+use StephanSchuler\DataStream\Node\Provider\ProviderInterface;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 trait TransportTrait
@@ -17,7 +16,7 @@ trait TransportTrait
 
     /**
      * @param ProviderInterface $provider
-     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     * @see \StephanSchuler\DataStream\Node\Consumer\ConsumerTrait::providedBy()
      */
     public function providedBy(ProviderInterface $provider)
     {
@@ -28,13 +27,13 @@ trait TransportTrait
 
     /**
      * @var ConsumerInterface[]
-     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     * @see \StephanSchuler\DataStream\Node\Consumer\ConsumerTrait::providedBy()
      */
     protected $consumers = [];
 
     /**
      * @param ConsumerInterface $consumer
-     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     * @see \StephanSchuler\DataStream\Node\Consumer\ConsumerTrait::providedBy()
      */
     public function consumedBy(ConsumerInterface $consumer)
     {
@@ -43,7 +42,7 @@ trait TransportTrait
 
     /**
      * @return ConsumerInterface[]
-     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     * @see \StephanSchuler\DataStream\Node\Consumer\ConsumerTrait::providedBy()
      */
     public function getConsumers()
     {
@@ -52,7 +51,7 @@ trait TransportTrait
 
     /**
      * @param $data
-     * @see \StephanSchuler\DataStream\Consumer\ConsumerTrait::providedBy()
+     * @see \StephanSchuler\DataStream\Node\Consumer\ConsumerTrait::providedBy()
      */
     protected function feedConsumers($data)
     {

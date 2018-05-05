@@ -1,15 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Source;
+namespace StephanSchuler\DataStream\Node\Consumer;
 
-use StephanSchuler\DataStream\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Scheduler;
 
-class Csv implements SourceInterface
+class Csv implements ConsumerInterface
 {
-    use ProviderTrait;
+    use ConsumerTrait;
 
     /**
      * @var string
@@ -31,8 +29,14 @@ class Csv implements SourceInterface
      */
     protected $escape;
 
-    protected function __construct(string $fileName, string $delimiter, string $enclosure, string $escape)
-    {
+    protected $name;
+
+    protected function __construct(
+        string $fileName,
+        string $delimiter = ',',
+        string $enclosure = '"',
+        string $escape = '\\'
+    ) {
         GraphBuilder::getInstance()->addNode($this);
         $this->fileName = $fileName;
         $this->delimiter = $delimiter;
@@ -40,25 +44,20 @@ class Csv implements SourceInterface
         $this->escape = $escape;
     }
 
-    public function provide()
-    {
-        Scheduler::globalInstance()->schedule(function () {
-            $fp = fopen($this->fileName, 'r');
-            while ($line = fgetcsv($fp, 0, $this->delimiter, $this->enclosure, $this->escape)) {
-                yield;
-                $this->feedConsumers($line);
-            }
-            fclose($fp);
-        });
-    }
-
-    public static function createSource(
+    public static function createConsumer(
         string $fileName,
         string $delimiter = ',',
         string $enclosure = '"',
         string $escape = '\\'
-    ): Csv {
+    ): Echoing {
         $className = get_called_class();
         return new $className($fileName, $delimiter, $enclosure, $escape);
+    }
+
+    public function consume($data)
+    {
+        $fp = fopen($this->fileName, 'a+');
+        fputcsv($fp, $data, $this->delimiter, $this->enclosure, $this->escape);
+        fclose($fp);
     }
 }

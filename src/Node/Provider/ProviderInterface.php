@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace StephanSchuler\DataStream\Provider;
+namespace StephanSchuler\DataStream\Node\Provider;
 
-use StephanSchuler\DataStream\Consumer\ConsumerInterface;
+use StephanSchuler\DataStream\Node\Consumer\ConsumerInterface;
 
 interface ProviderInterface
 {

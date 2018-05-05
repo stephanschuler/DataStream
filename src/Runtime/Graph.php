@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Runtime;
 
 use StephanSchuler\DataStream\Node\NodeInterface;
-use StephanSchuler\DataStream\Source\SourceInterface;
+use StephanSchuler\DataStream\Node\Source\SourceInterface;
 
 class Graph
 {
