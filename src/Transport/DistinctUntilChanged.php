@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Transport;
 
 use StephanSchuler\DataStream\Consumer\StatefulInterface;
-use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Runtime\GraphBuilder;
 use StephanSchuler\DataStream\Scheduler\Task;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
@@ -21,7 +21,7 @@ class DistinctUntilChanged implements TransportInterface, StatefulInterface, Eli
 
     protected function __construct(callable $compare = null)
     {
-        StateBuilder::getInstance()->addNode($this);
+        GraphBuilder::getInstance()->addNode($this);
         $this->compare = $compare;
     }
 

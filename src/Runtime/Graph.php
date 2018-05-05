@@ -6,7 +6,7 @@ namespace StephanSchuler\DataStream\Runtime;
 use StephanSchuler\DataStream\Node\NodeInterface;
 use StephanSchuler\DataStream\Source\SourceInterface;
 
-class State
+class Graph
 {
     /**
      * @var SourceInterface[]
@@ -28,7 +28,7 @@ class State
         return $this->sources;
     }
 
-    public function setSource(SourceInterface ...$sources): State
+    public function setSource(SourceInterface ...$sources): Graph
     {
         $this->sources = $sources;
         return $this;
@@ -39,7 +39,7 @@ class State
         return $this->nodes;
     }
 
-    public function addNode(NodeInterface $node): State
+    public function addNode(NodeInterface $node): Graph
     {
         $this->nodes[] = $node;
         if ($node instanceof SourceInterface) {
@@ -59,7 +59,7 @@ class State
         }
     }
 
-    public function setNodeLabel(NodeInterface $node, string $label): State
+    public function setNodeLabel(NodeInterface $node, string $label): Graph
     {
         $this->labels[spl_object_hash($node)] = $label;
         return $this;

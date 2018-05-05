@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Source;
 
 use StephanSchuler\DataStream\Provider\ProviderTrait;
-use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Runtime\GraphBuilder;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class Csv implements SourceInterface
@@ -33,7 +33,7 @@ class Csv implements SourceInterface
 
     protected function __construct(string $fileName, string $delimiter, string $enclosure, string $escape)
     {
-        StateBuilder::getInstance()->addNode($this);
+        GraphBuilder::getInstance()->addNode($this);
         $this->fileName = $fileName;
         $this->delimiter = $delimiter;
         $this->enclosure = $enclosure;

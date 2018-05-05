@@ -6,7 +6,7 @@ namespace StephanSchuler\DataStream\Source;
 use ArrayIterator;
 use Iterator;
 use StephanSchuler\DataStream\Provider\ProviderTrait;
-use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Runtime\GraphBuilder;
 use StephanSchuler\DataStream\Scheduler\Task;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
@@ -21,7 +21,7 @@ class Sequence implements SourceInterface
 
     protected function __construct(Iterator $source)
     {
-        StateBuilder::getInstance()->addNode($this);
+        GraphBuilder::getInstance()->addNode($this);
         $this->source = $source;
     }
 

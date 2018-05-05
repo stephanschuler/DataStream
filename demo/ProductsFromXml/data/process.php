@@ -2,15 +2,15 @@
 
 use StephanSchuler\DataStream\Consumer\Echoing;
 use StephanSchuler\DataStream\Consumer\Remember;
-use StephanSchuler\DataStream\Runtime\Runtime;
-use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Runtime\GraphBuilder;
+use StephanSchuler\DataStream\Runtime\Process;
 use StephanSchuler\DataStream\Source\XmlStream;
 use StephanSchuler\DataStream\Transport\Filter;
 use StephanSchuler\DataStream\Transport\Mapper;
 use StephanSchuler\DataStream\Transport\Merger;
 use StephanSchuler\DataStream\Transport\XpathSplitter;
 
-return Runtime::defineNetwork(function (StateBuilder $runtime) {
+return Process::define(function (GraphBuilder $runtime) {
 
     /***************************************************************
      * Define Provider
@@ -79,7 +79,7 @@ return Runtime::defineNetwork(function (StateBuilder $runtime) {
      * Add some labels
      **************************************************************/
 
-    (function (StateBuilder $runtime) use (&$products, &$productNames, &$lastProduct, &$variants) {
+    (function (GraphBuilder $runtime) use (&$products, &$productNames, &$lastProduct, &$variants) {
 
         $runtime
             ->setNodeLabel($products, 'Products')

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Consumer;
 
-use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Runtime\GraphBuilder;
 
 class Echoing implements ConsumerInterface
 {
@@ -18,7 +18,7 @@ class Echoing implements ConsumerInterface
 
     protected function __construct(string $name)
     {
-        StateBuilder::getInstance()->addNode($this);
+        GraphBuilder::getInstance()->addNode($this);
         $this->name = $name;
     }
 

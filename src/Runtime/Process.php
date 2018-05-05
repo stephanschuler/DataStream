@@ -9,7 +9,7 @@ use StephanSchuler\DataStream\Model\Node;
 use StephanSchuler\DataStream\Provider\ProviderInterface;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
-class Runtime
+class Process
 {
     /**
      * @var callable
@@ -22,7 +22,7 @@ class Runtime
     private $settings = [];
 
     /**
-     * @var StateBuilder[]
+     * @var GraphBuilder[]
      */
     private static $builders = [];
 
@@ -31,31 +31,31 @@ class Runtime
         $this->definition = $definition;
     }
 
-    public static function defineNetwork(callable $definition): Runtime
+    public static function define(callable $definition): Process
     {
         $className = get_called_class();
         return new $className($definition);
     }
 
-    public static function getCurrentBuilder(): StateBuilder
+    public static function getCurrentBuilder(): GraphBuilder
     {
         return current(self::$builders);
     }
 
-    public function addSettings(array $settings): Runtime
+    public function addSettings(array $settings): Process
     {
         $this->settings = array_merge_recursive($this->settings, $settings);
         return $this;
     }
 
     /**
-     * @return Runtime
+     * @return Process
      * @throws \Exception
      */
-    public function run(): Runtime
+    public function run(): Process
     {
         Scheduler::withGlobalInstance(function () {
-            foreach ($this->buildState()->getSources() as $source) {
+            foreach ($this->buildGraph()->getSources() as $source) {
                 $source->provide();
             }
             Scheduler::globalInstance()->run();
@@ -65,16 +65,16 @@ class Runtime
 
     public function getNetwork(): Network
     {
-        $state = $this->buildState();
-        $workerNodes = $state->getNodes();
+        $graph = $this->buildGraph();
+        $workerNodes = $graph->getNodes();
 
-        $nodes = (function (State $state, $workerNodes) {
+        $nodes = (function (Graph $state, $workerNodes) {
             $nodes = [];
             foreach ($workerNodes as $id => $node) {
                 $nodes[$id] = new Node($node, $id, $state->getNodeLabel($node));
             }
             return $nodes;
-        })($state, $workerNodes);
+        })($graph, $workerNodes);
 
         $edges = (function ($nodes, $workerNodes) {
             $edges = [];
@@ -93,10 +93,10 @@ class Runtime
         return new Network($nodes, $edges);
     }
 
-    protected function buildState(): State
+    protected function buildGraph(): Graph
     {
-        $state = new State();
-        $builder = new StateBuilder($state, $this->settings);
+        $graph = new Graph();
+        $builder = new GraphBuilder($graph, $this->settings);
 
         array_push(self::$builders, $builder);
 
@@ -105,6 +105,6 @@ class Runtime
 
         array_pop(self::$builders);
 
-        return $state;
+        return $graph;
     }
 }

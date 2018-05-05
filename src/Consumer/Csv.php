@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Consumer;
 
-use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Runtime\GraphBuilder;
 
 class Csv implements ConsumerInterface
 {
@@ -37,7 +37,7 @@ class Csv implements ConsumerInterface
         string $enclosure = '"',
         string $escape = '\\'
     ) {
-        StateBuilder::getInstance()->addNode($this);
+        GraphBuilder::getInstance()->addNode($this);
         $this->fileName = $fileName;
         $this->delimiter = $delimiter;
         $this->enclosure = $enclosure;

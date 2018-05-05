@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Transport;
 
-use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Runtime\GraphBuilder;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class XpathMapper implements TransportInterface
@@ -17,7 +17,7 @@ class XpathMapper implements TransportInterface
 
     protected function __construct(array $definition)
     {
-        StateBuilder::getInstance()->addNode($this);
+        GraphBuilder::getInstance()->addNode($this);
         $this->definition = $definition;
     }
 
