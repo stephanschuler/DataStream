@@ -11,46 +11,38 @@ class Scheduler
     protected static $current;
 
     /**
-     * @var Task[]
+     * @var Loop
      */
-    protected $tasks = [];
+    protected $tasks;
 
     /**
      * @var Task
      */
     protected $task;
 
+    public function __construct()
+    {
+        $this->tasks = new Loop();
+    }
+
     public function schedule(callable $workerLoop)
     {
-        $this->tasks[] = new Task($workerLoop(), $this->getPriority());
+        $task = new Task($workerLoop(), $this->getPriority());
+        $this->tasks->enqueue($task, $task->getPriority());
     }
 
     public function run()
     {
-        $ticks = 0;
-        $executed = 0;
+        while ($this->tasks->count()) {
+            $this->task = $this->tasks->next();
 
-        while ($this->tasks) {
-            $ticks++;
-            $this->task = $this->next();
-
-            if ($this->hasBestPriority()) {
-                $tickResult = ($this->task)();
-                $executed++;
-                if ($tickResult) {
-                    $this->tasks = array_filter($this->tasks, function ($worker) {
-                        return $worker !== $this->task;
-                    });
-                }
+            $tickResult = ($this->task)();
+            if ($tickResult) {
+                $this->tasks->dequeue($this->task);
             }
 
             $this->task = null;
         }
-        print_r([
-            'ticks' => $ticks,
-            'executed' => $executed,
-            'memory_get_peak_usage' => memory_get_peak_usage()
-        ]);
     }
 
     public static function withScheduler(callable $callback)
@@ -68,20 +60,6 @@ class Scheduler
     public static function current()
     {
         return self::$current;
-    }
-
-    protected function next(): Task
-    {
-        $current = array_shift($this->tasks);
-        array_push($this->tasks, $current);
-        return $current;
-    }
-
-    protected function hasBestPriority(): bool
-    {
-        return !array_filter($this->tasks, function (Task $worker) {
-            return $worker->getPriority() > $this->task->getPriority();
-        });
     }
 
     protected function getPriority(): int
