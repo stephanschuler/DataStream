@@ -5,6 +5,8 @@ namespace StephanSchuler\DataStream\Transport;
 
 use StephanSchuler\DataStream\Consumer\StatefulInterface;
 use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Scheduler\Task;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class DistinctUntilChanged implements TransportInterface, StatefulInterface, EliminatorInterface
 {
@@ -25,12 +27,18 @@ class DistinctUntilChanged implements TransportInterface, StatefulInterface, Eli
 
     public function consume($data)
     {
-        $comparable = $this->compare ? ($this->compare)($data) : $data;
-        if ($comparable === $this->lastItem) {
-            return;
-        }
-        $this->lastItem = $comparable;
-        $this->feedConsumers($data);
+        Scheduler::current()->schedule(function () use ($data) {
+
+            yield;
+
+            $comparable = $this->compare ? ($this->compare)($data) : $data;
+            if ($comparable === $this->lastItem) {
+                return;
+            }
+            $this->lastItem = $comparable;
+            $this->feedConsumers($data);
+
+        });
     }
 
     public function get()

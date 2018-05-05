@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Transport;
 
 use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class Filter implements TransportInterface, EliminatorInterface
 {
@@ -22,9 +23,15 @@ class Filter implements TransportInterface, EliminatorInterface
 
     public function consume($data)
     {
-        if (($this->definition)($data)) {
-            $this->feedConsumers($data);
-        }
+        Scheduler::current()->schedule(function () use ($data) {
+
+            yield;
+
+            if (($this->definition)($data)) {
+                $this->feedConsumers($data);
+            }
+
+        });
     }
 
     public static function createTransport(callable $definition): Filter

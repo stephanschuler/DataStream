@@ -27,7 +27,7 @@ trait ProviderTrait
 
     protected function feedConsumers($data)
     {
-        foreach (array_reverse($this->getConsumers()) as $consumer) {
+        foreach ($this->getConsumers() as $consumer) {
             $consumer->consume($data);
         }
     }

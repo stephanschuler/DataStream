@@ -7,6 +7,7 @@ use StephanSchuler\DataStream\Model\Edge;
 use StephanSchuler\DataStream\Model\Network;
 use StephanSchuler\DataStream\Model\Node;
 use StephanSchuler\DataStream\Provider\ProviderInterface;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class Runtime
 {
@@ -47,11 +48,18 @@ class Runtime
         return $this;
     }
 
+    /**
+     * @return Runtime
+     * @throws \Exception
+     */
     public function run(): Runtime
     {
-        foreach ($this->buildState()->getSources() as $source) {
-            $source->provide();
-        }
+        Scheduler::withScheduler(function () {
+            foreach ($this->buildState()->getSources() as $source) {
+                $source->provide();
+            }
+            Scheduler::current()->run();
+        });
         return $this;
     }
 

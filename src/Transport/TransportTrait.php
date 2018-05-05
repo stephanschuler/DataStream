@@ -5,6 +5,8 @@ namespace StephanSchuler\DataStream\Transport;
 
 use StephanSchuler\DataStream\Consumer\ConsumerInterface;
 use StephanSchuler\DataStream\Provider\ProviderInterface;
+use StephanSchuler\DataStream\Scheduler\Task;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 trait TransportTrait
 {
@@ -54,8 +56,13 @@ trait TransportTrait
      */
     protected function feedConsumers($data)
     {
-        foreach (array_reverse($this->getConsumers()) as $consumer) {
-            $consumer->consume($data);
-        }
+        Scheduler::current()->schedule(function () use ($data) {
+
+            foreach (($this->getConsumers()) as $consumer) {
+                yield;
+                $consumer->consume($data);
+            }
+
+        });
     }
 }

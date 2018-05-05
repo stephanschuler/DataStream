@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Transport;
 
 use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Scheduler\Task;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class Mapper implements TransportInterface
 {
@@ -22,8 +24,14 @@ class Mapper implements TransportInterface
 
     public function consume($data)
     {
-        $newData = ($this->definition)($data);
-        $this->feedConsumers($newData);
+        Scheduler::current()->schedule(function () use ($data) {
+
+            yield;
+
+            $newData = ($this->definition)($data);
+            $this->feedConsumers($newData);
+
+        });
     }
 
     public static function createTransport(callable $definition): Mapper

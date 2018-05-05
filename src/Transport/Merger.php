@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Transport;
 
 use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Scheduler\Task;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class Merger implements TransportInterface
 {
@@ -22,6 +24,12 @@ class Merger implements TransportInterface
 
     public function consume($data)
     {
-        $this->feedConsumers($data);
+        Scheduler::current()->schedule(function () use ($data) {
+
+            yield;
+
+            $this->feedConsumers($data);
+
+        });
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Transport;
 
 use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Scheduler\Task;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 trait SplitterTrait
 {
@@ -22,10 +24,15 @@ trait SplitterTrait
 
     public function consume($data)
     {
-        $generator = ($this->definition)($data);
-        foreach ($generator as $partData) {
-            $this->feedConsumers($partData);
-        }
+        Scheduler::current()->schedule(function () use ($data) {
+
+            $generator = ($this->definition)($data);
+            foreach ($generator as $partData) {
+                yield;
+                $this->feedConsumers($partData);
+            }
+
+        });
     }
 
 }

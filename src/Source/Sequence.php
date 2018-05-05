@@ -7,6 +7,8 @@ use ArrayIterator;
 use Iterator;
 use StephanSchuler\DataStream\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Scheduler\Task;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 class Sequence implements SourceInterface
 {
@@ -25,9 +27,14 @@ class Sequence implements SourceInterface
 
     public function provide()
     {
-        foreach ($this->source as $element) {
-            $this->feedConsumers($element);
-        }
+        Scheduler::current()->schedule(function () {
+
+            foreach ($this->source as $element) {
+                yield;
+                $this->feedConsumers($element);
+            }
+
+        });
     }
 
     public static function createSource(Iterator $source): Sequence

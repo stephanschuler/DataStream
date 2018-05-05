@@ -5,6 +5,8 @@ namespace StephanSchuler\DataStream\Source;
 
 use StephanSchuler\DataStream\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\StateBuilder;
+use StephanSchuler\DataStream\Scheduler\Task;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 use XMLElementIterator;
 use XMLElementXpathFilter;
 use XMLReader;
@@ -33,17 +35,22 @@ class XmlStream implements SourceInterface
 
     public function provide()
     {
-        $reader = new XMLReader();
-        $reader->open($this->fileName);
+        Scheduler::current()->schedule(function () {
 
-        $iterator = new XMLElementIterator($reader);
-        $list = new XMLElementXpathFilter($iterator, $this->xpath);
-        /** @var XMLReaderNode $element */
-        foreach ($list as $element) {
-            $this->feedConsumers($element->getSimpleXMLElement());
-        }
+            $reader = new XMLReader();
+            $reader->open($this->fileName);
 
-        $reader->close();
+            $iterator = new XMLElementIterator($reader);
+            $list = new XMLElementXpathFilter($iterator, $this->xpath);
+
+            /** @var XMLReaderNode $element */
+            foreach ($list as $element) {
+                yield;
+                $this->feedConsumers($element->getSimpleXMLElement());
+            }
+
+            $reader->close();
+        });
     }
 
     public static function createSource(string $fileName, string $xpath = '/*'): XmlStream
