@@ -4,9 +4,15 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Scheduler;
 
 use Generator;
+use StephanSchuler\DataStream\Node\NodeInterface;
 
 class Task
 {
+    /**
+     * @var NodeInterface
+     */
+    protected $source;
+
     /**
      * @var Generator
      */
@@ -17,8 +23,9 @@ class Task
      */
     protected $priority;
 
-    public function __construct(Generator $loop, int $priority)
+    public function __construct(NodeInterface $source, Generator $loop, int $priority)
     {
+        $this->source = $source;
         $this->loop = $loop;
         $this->priority = $priority;
     }
@@ -33,5 +40,10 @@ class Task
     public function getPriority(): int
     {
         return $this->priority;
+    }
+
+    public function getSource(): NodeInterface
+    {
+        return $this->source;
     }
 }

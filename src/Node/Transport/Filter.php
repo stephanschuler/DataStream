@@ -23,7 +23,7 @@ class Filter implements TransportInterface, EliminatorInterface
 
     public function consume($data, $wireName = '')
     {
-        Scheduler::globalInstance()->schedule(function () use ($data) {
+        Scheduler::globalInstance()->enqueueProducingTask($this, function () use ($data) {
 
             yield;
 

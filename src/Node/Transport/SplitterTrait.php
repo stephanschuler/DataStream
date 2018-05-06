@@ -23,7 +23,7 @@ trait SplitterTrait
 
     public function consume($data, $wireName = '')
     {
-        Scheduler::globalInstance()->schedule(function () use ($data) {
+        Scheduler::globalInstance()->enqueueProducingTask($this, function () use ($data) {
 
             $generator = ($this->definition)($data);
             foreach ($generator as $partData) {

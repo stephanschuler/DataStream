@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Scheduler;
 
+use StephanSchuler\DataStream\Node\NodeInterface;
+
 class Scheduler
 {
     /**
@@ -13,7 +15,12 @@ class Scheduler
     /**
      * @var Loop
      */
-    protected $tasks;
+    protected $producingTasks;
+
+    /**
+     * @var Loop
+     */
+    protected $consumingTasks;
 
     /**
      * @var Task
@@ -24,24 +31,32 @@ class Scheduler
 
     public function __construct()
     {
-        $this->tasks = new Loop();
+        $this->consumingTasks = new Loop();
+        $this->producingTasks = new Loop();
     }
 
-    public function schedule(callable $workerLoop)
+    public function enqueueConsumingTask(NodeInterface $source, callable $workerLoop)
     {
-        $task = new Task($workerLoop(), $this->getPriority());
-        $this->tasks->enqueue($task, $task->getPriority());
+        $task = new Task($source, $workerLoop(), $this->getPriority());
+        $this->consumingTasks->enqueue($task, $task->getPriority());
+    }
+
+    public function enqueueProducingTask(NodeInterface $source, callable $workerLoop)
+    {
+        $task = new Task($source, $workerLoop(), $this->getPriority());
+        $this->producingTasks->enqueue($task, $task->getPriority());
     }
 
     public function run()
     {
-        while ($this->tasks->count()) {
+        while ($loop = $this->getActiveLoop()) {
+
             $this->ticks++;
-            $this->task = $this->tasks->next();
+            $this->task = $loop->next();
 
             $tickResult = ($this->task)();
             if ($tickResult) {
-                $this->tasks->dequeue($this->task);
+                $loop->dequeue($this->task);
             }
 
             $this->task = null;
@@ -71,5 +86,14 @@ class Scheduler
     protected function getPriority(): int
     {
         return ($this->task ? $this->task->getPriority() : 0) + 1;
+    }
+
+    protected function getActiveLoop()
+    {
+        if ($this->consumingTasks->count()) {
+            return $this->consumingTasks;
+        } elseif ($this->producingTasks->count()) {
+            return $this->producingTasks;
+        }
     }
 }

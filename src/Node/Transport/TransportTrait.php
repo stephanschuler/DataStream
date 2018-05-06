@@ -65,7 +65,7 @@ trait TransportTrait
      */
     protected function feedConsumers($data)
     {
-        Scheduler::globalInstance()->schedule(function () use ($data) {
+        Scheduler::globalInstance()->enqueueConsumingTask($this, function () use ($data) {
 
             foreach (($this->getConsumers()) as $wireName => $consumer) {
                 yield;

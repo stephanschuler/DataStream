@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Node\Provider;
 
 use StephanSchuler\DataStream\Node\Consumer\ConsumerInterface;
+use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 trait ProviderTrait
 {
@@ -31,8 +32,11 @@ trait ProviderTrait
 
     protected function feedConsumers($data)
     {
-        foreach ($this->getConsumers() as $wireName => $consumer) {
-            $consumer->consume($data, $wireName);
-        }
+        Scheduler::globalInstance()->enqueueConsumingTask($this, function () use ($data) {
+            foreach ($this->getConsumers() as $wireName => $consumer) {
+                yield;
+                $consumer->consume($data, $wireName);
+            }
+        });
     }
 }
