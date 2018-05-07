@@ -15,7 +15,7 @@ class XpathMapper implements TransportInterface
      */
     protected $definition;
 
-    protected function __construct(array $definition)
+    public function __construct(array $definition)
     {
         GraphBuilder::getInstance()->addNode($this);
         $this->definition = $definition;

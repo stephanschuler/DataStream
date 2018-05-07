@@ -10,7 +10,7 @@ class Merger implements TransportInterface
 {
     use TransportTrait;
 
-    protected function __construct()
+    public function __construct()
     {
         GraphBuilder::getInstance()->addNode($this);
     }

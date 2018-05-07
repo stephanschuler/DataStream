@@ -31,7 +31,7 @@ class Csv implements SourceInterface
      */
     protected $escape;
 
-    protected function __construct(string $fileName, string $delimiter, string $enclosure, string $escape)
+    public function __construct(string $fileName, string $delimiter, string $enclosure, string $escape)
     {
         GraphBuilder::getInstance()->addNode($this);
         $this->fileName = $fileName;

@@ -26,7 +26,7 @@ class Process
      */
     private static $builders = [];
 
-    protected function __construct(callable $definition)
+    public function __construct(callable $definition)
     {
         $this->definition = $definition;
     }

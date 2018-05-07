@@ -11,7 +11,7 @@ class Remember implements ConsumerInterface, StatefulInterface
 
     protected $remember;
 
-    protected function __construct()
+    public function __construct()
     {
         GraphBuilder::getInstance()->addNode($this);
     }

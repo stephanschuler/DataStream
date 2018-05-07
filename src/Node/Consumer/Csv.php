@@ -31,7 +31,7 @@ class Csv implements ConsumerInterface
 
     protected $name;
 
-    protected function __construct(
+    public function __construct(
         string $fileName,
         string $delimiter = ',',
         string $enclosure = '"',

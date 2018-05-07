@@ -15,7 +15,7 @@ class Mapper implements TransportInterface
      */
     protected $definition;
 
-    protected function __construct(callable $definition)
+    public function __construct(callable $definition)
     {
         GraphBuilder::getInstance()->addNode($this);
         $this->definition = $definition;

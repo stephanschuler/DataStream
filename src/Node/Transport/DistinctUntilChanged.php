@@ -18,7 +18,7 @@ class DistinctUntilChanged implements TransportInterface, StatefulInterface, Eli
      */
     protected $compare;
 
-    protected function __construct(callable $compare = null)
+    public function __construct(callable $compare = null)
     {
         GraphBuilder::getInstance()->addNode($this);
         $this->compare = $compare;

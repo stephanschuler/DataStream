@@ -16,7 +16,7 @@ class Echoing implements ConsumerInterface
 
     protected $name;
 
-    protected function __construct(string $name)
+    public function __construct(string $name)
     {
         GraphBuilder::getInstance()->addNode($this);
         $this->name = $name;

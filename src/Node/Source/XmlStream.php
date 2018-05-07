@@ -25,7 +25,7 @@ class XmlStream implements SourceInterface
      */
     protected $xpath = '/*';
 
-    protected function __construct(string $fileName, string $xpath)
+    public function __construct(string $fileName, string $xpath)
     {
         GraphBuilder::getInstance()->addNode($this);
         $this->fileName = $fileName;

@@ -18,7 +18,7 @@ class Sequence implements SourceInterface
      */
     protected $source;
 
-    protected function __construct(Iterator $source)
+    public function __construct(Iterator $source)
     {
         GraphBuilder::getInstance()->addNode($this);
         $this->source = $source;
