@@ -13,7 +13,7 @@ class XpathSplitter implements TransportInterface, GeneratorInterface
     {
         $splitter = function (SimpleXMLElement $data) use ($xpath) {
             foreach ($data->xpath($xpath) as $variant) {
-                yield $variant;
+                yield clone $variant;
             }
         };
         $className = get_called_class();
