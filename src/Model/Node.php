@@ -111,7 +111,7 @@ class Node implements \JsonSerializable
             'id' => (string)$this->getId(),
             'label' => $this->getLabel(),
             'group' => $this->getType(),
-            'level' => array_search($this->getType(), $nodesByType)
+            'level' => array_search($this->getType(), $nodesByType, true)
         ]);
     }
 }
