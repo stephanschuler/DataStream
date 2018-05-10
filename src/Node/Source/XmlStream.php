@@ -34,7 +34,7 @@ class XmlStream implements SourceInterface
 
     public function provide()
     {
-        Scheduler::globalInstance()->enqueueProducingTask($this, function () {
+        Scheduler::globalInstance()->enqueueTask($this, function () {
 
             $reader = new XMLReader();
             $reader->open($this->fileName);
@@ -45,7 +45,7 @@ class XmlStream implements SourceInterface
             /** @var XMLReaderNode $element */
             foreach ($list as $element) {
                 yield;
-                $this->feedConsumers($element->getSimpleXMLElement());
+                $this->feedConsumers(clone $element->getSimpleXMLElement());
             }
 
             $reader->close();

@@ -5,7 +5,6 @@ namespace StephanSchuler\DataStream\Node\Transport;
 
 use StephanSchuler\DataStream\Node\Consumer\ConsumerInterface;
 use StephanSchuler\DataStream\Node\Provider\ProviderInterface;
-use StephanSchuler\DataStream\Scheduler\Scheduler;
 
 trait TransportTrait
 {
@@ -65,13 +64,8 @@ trait TransportTrait
      */
     protected function feedConsumers($data)
     {
-        Scheduler::globalInstance()->enqueueConsumingTask($this, function () use ($data) {
-
-            foreach (($this->getConsumers()) as $wireName => $consumer) {
-                yield;
-                $consumer->consume($data, $wireName);
-            }
-
-        });
+        foreach (($this->getConsumers()) as $wireName => $consumer) {
+            $consumer->consume($data, $wireName);
+        }
     }
 }

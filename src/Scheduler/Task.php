@@ -30,6 +30,11 @@ class Task
         $this->priority = $priority;
     }
 
+    public function getSource(): NodeInterface
+    {
+        return $this->source;
+    }
+
     public function __invoke(): bool
     {
         $this->loop->current();
@@ -40,10 +45,5 @@ class Task
     public function getPriority(): int
     {
         return $this->priority;
-    }
-
-    public function getSource(): NodeInterface
-    {
-        return $this->source;
     }
 }

@@ -21,9 +21,9 @@ class Merger implements TransportInterface
         return new $className();
     }
 
-    public function consume($data, $wireName = '')
+    public function consume( $data, $wireName = '')
     {
-        Scheduler::globalInstance()->enqueueProducingTask($this, function () use ($data) {
+        Scheduler::globalInstance()->enqueueTask($this, function () use ($data) {
 
             yield;
 

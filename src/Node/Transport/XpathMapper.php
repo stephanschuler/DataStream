@@ -23,7 +23,7 @@ class XpathMapper implements TransportInterface
 
     public function consume($data, $wireName = '')
     {
-        Scheduler::globalInstance()->enqueueProducingTask($this, function () use ($data) {
+        Scheduler::globalInstance()->enqueueTask($this, function () use ($data) {
 
             yield;
 

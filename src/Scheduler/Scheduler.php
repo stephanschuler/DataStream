@@ -13,14 +13,9 @@ class Scheduler
     protected static $current;
 
     /**
-     * @var Loop
+     * @var Task[]
      */
-    protected $producingTasks;
-
-    /**
-     * @var Loop
-     */
-    protected $consumingTasks;
+    protected $tasks = [];
 
     /**
      * @var Task
@@ -29,46 +24,46 @@ class Scheduler
 
     protected $ticks = 0;
 
+    /**
+     * @var DependencyCalculator
+     */
+    protected $dependencies;
+
     public function __construct()
     {
-        $this->consumingTasks = new Loop();
-        $this->producingTasks = new Loop();
+        $this->dependencies;
     }
 
-    public function enqueueConsumingTask(NodeInterface $source, callable $workerLoop)
+    public function enqueueTask(NodeInterface $source, callable $workerLoop)
     {
         $task = new Task($source, $workerLoop(), $this->getPriority());
-        $this->consumingTasks->enqueue($task, $task->getPriority());
-    }
-
-    public function enqueueProducingTask(NodeInterface $source, callable $workerLoop)
-    {
-        $task = new Task($source, $workerLoop(), $this->getPriority());
-        $this->producingTasks->enqueue($task, $task->getPriority());
+        $this->tasks[] = $task;
     }
 
     public function run()
     {
-        while ($loop = $this->getActiveLoop()) {
+        while (count($this->tasks)) {
+
+            $this->task = $this->getNextPossibleTask();
 
             $this->ticks++;
-            $this->task = $loop->next();
 
             $tickResult = ($this->task)();
             if ($tickResult) {
-                $loop->dequeue($this->task);
+                $this->tasks = array_filter($this->tasks, function (Task $task) {
+                    return $task !== $this->task;
+                });
             }
-
-            $this->task = null;
         }
     }
 
-    public static function withGlobalInstance(callable $callback)
+    public static function withGlobalInstance(DependencyCalculator $dependencies, callable $callback)
     {
         $before = Scheduler::$current;
 
         $class = get_called_class();
         Scheduler::$current = new $class;
+        Scheduler::$current->dependencies = $dependencies;
         $callback();
         Scheduler::$current = $before;
     }
@@ -88,12 +83,32 @@ class Scheduler
         return ($this->task ? $this->task->getPriority() : 0) + 1;
     }
 
-    protected function getActiveLoop()
+    protected function getNextPossibleTask()
     {
-        if ($this->consumingTasks->count()) {
-            return $this->consumingTasks;
-        } elseif ($this->producingTasks->count()) {
-            return $this->producingTasks;
+        $possibleTasks = [];
+        foreach (array_values($this->tasks) as $askingTask) {
+            if (!$this->isBlockedByDependencies($askingTask)) {
+                $possibleTasks[] = $askingTask;
+            }
         }
+        usort($possibleTasks, function (Task $a, Task $b) {
+            return $a->getPriority() <=> $b->getPriority();
+        });
+        return current($possibleTasks);
+    }
+
+    protected function isBlockedByDependencies(Task $askingTask): bool
+    {
+        $askingNode = $askingTask->getSource();
+
+        $waitingTasks = array_filter($this->tasks, function (Task $waitingTask) use ($askingTask) {
+            return $waitingTask !== $askingTask;
+        });
+        /** @var NodeInterface[] $waitingNodes */
+        $waitingNodes = array_map(function (Task $task) {
+            return $task->getSource();
+        }, $waitingTasks);
+
+        return $this->dependencies->isBlockedByDependencies($askingNode, ...$waitingNodes);
     }
 }

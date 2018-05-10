@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace StephanSchuler\DataStream\Node\Transport;
 
+use StephanSchuler\DataStream\Node\NodeInterface;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
 use StephanSchuler\DataStream\Scheduler\Scheduler;
 
@@ -17,13 +18,15 @@ trait SplitterTrait
 
     public function __construct(callable $definition)
     {
+        /** @var NodeInterface $this */
         GraphBuilder::getInstance()->addNode($this);
         $this->definition = $definition;
     }
 
     public function consume($data, $wireName = '')
     {
-        Scheduler::globalInstance()->enqueueProducingTask($this, function () use ($data) {
+        /** @var NodeInterface $this */
+        Scheduler::globalInstance()->enqueueTask($this, function () use ($data) {
 
             $generator = ($this->definition)($data);
             foreach ($generator as $partData) {
