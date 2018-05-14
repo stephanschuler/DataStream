@@ -29,6 +29,11 @@ trait ProviderTrait
         return $this->consumers;
     }
 
+    public function dependsOn(): array
+    {
+        return $this->consumers;
+    }
+
     protected function feedConsumers($data)
     {
         foreach ($this->getConsumers() as $wireName => $consumer) {

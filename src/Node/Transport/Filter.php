@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace StephanSchuler\DataStream\Node\Transport;
 
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Scheduler;
+use StephanSchuler\DependencyScheduler\Scheduler;
 
 class Filter implements TransportInterface, EliminatorInterface
 {
@@ -23,7 +23,7 @@ class Filter implements TransportInterface, EliminatorInterface
 
     public function consume( $data, $wireName = '')
     {
-        Scheduler::globalInstance()->enqueueTask($this, function () use ($data) {
+        Scheduler::globalInstance()->enqueueWorkload($this, function () use ($data) {
 
             yield;
 

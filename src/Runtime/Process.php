@@ -7,8 +7,8 @@ use StephanSchuler\DataStream\Model\Edge;
 use StephanSchuler\DataStream\Model\Network;
 use StephanSchuler\DataStream\Model\Node;
 use StephanSchuler\DataStream\Node\Provider\ProviderInterface;
-use StephanSchuler\DataStream\Scheduler\DependencyCalculator;
-use StephanSchuler\DataStream\Scheduler\Scheduler;
+use StephanSchuler\DependencyScheduler\Dependency;
+use StephanSchuler\DependencyScheduler\Scheduler;
 
 class Process
 {
@@ -55,15 +55,15 @@ class Process
      */
     public function run(): Process
     {
-        $graph = $this->buildGraph();
+        $scheduler = new Scheduler();
+        $scheduler->asGlobalInstance(function (Scheduler $scheduler) {
+            $graph = $this->buildGraph();
 
-        $dependencies = new DependencyCalculator(...$graph->getNodes());
-
-        Scheduler::withGlobalInstance($dependencies, function () use ($graph) {
             foreach ($graph->getSources() as $source) {
                 $source->provide();
             }
-            Scheduler::globalInstance()->run();
+
+            $scheduler->run(new Dependency(...$graph->getNodes()));
         });
         return $this;
     }

@@ -5,7 +5,7 @@ namespace StephanSchuler\DataStream\Node\Transport;
 
 use StephanSchuler\DataStream\Node\Consumer\StatefulInterface;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Scheduler;
+use StephanSchuler\DependencyScheduler\Scheduler;
 
 class DistinctUntilChanged implements TransportInterface, StatefulInterface, EliminatorInterface
 {
@@ -26,7 +26,7 @@ class DistinctUntilChanged implements TransportInterface, StatefulInterface, Eli
 
     public function consume($data, $wireName = '')
     {
-        Scheduler::globalInstance()->enqueueTask($this, function () use ($data) {
+        Scheduler::globalInstance()->enqueueWorkload($this, function () use ($data) {
 
             yield;
 

@@ -5,7 +5,7 @@ namespace StephanSchuler\DataStream\Node\Source;
 
 use StephanSchuler\DataStream\Node\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Scheduler;
+use StephanSchuler\DependencyScheduler\Scheduler;
 use XMLElementIterator;
 use XMLElementXpathFilter;
 use XMLReader;
@@ -34,7 +34,7 @@ class XmlStream implements SourceInterface
 
     public function provide()
     {
-        Scheduler::globalInstance()->enqueueTask($this, function () {
+        Scheduler::globalInstance()->enqueueWorkload($this, function () {
 
             $reader = new XMLReader();
             $reader->open($this->fileName);

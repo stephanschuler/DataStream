@@ -58,6 +58,11 @@ trait TransportTrait
         return $this->consumers;
     }
 
+    public function dependsOn(): array
+    {
+        return $this->consumers;
+    }
+
     /**
      * @param $data
      * @see \StephanSchuler\DataStream\Node\Consumer\ConsumerTrait::providedBy()

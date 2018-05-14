@@ -7,7 +7,7 @@ use ArrayIterator;
 use Iterator;
 use StephanSchuler\DataStream\Node\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Scheduler;
+use StephanSchuler\DependencyScheduler\Scheduler;
 
 class Sequence implements SourceInterface
 {
@@ -26,7 +26,7 @@ class Sequence implements SourceInterface
 
     public function provide()
     {
-        Scheduler::globalInstance()->enqueueTask($this, function () {
+        Scheduler::globalInstance()->enqueueWorkload($this, function () {
 
             foreach ($this->source as $element) {
                 yield;

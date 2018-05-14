@@ -1,4 +1,10 @@
 {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/stephanschuler/DependencyScheduler"
+        }
+    ],
     "name": "stephanschuler/data-stream",
     "description": "",
     "type": "library",
@@ -11,7 +17,8 @@
     ],
     "require": {
         "php": "~7.0",
-        "hakre/xmlreaderiterator": "^0.1.10"
+        "hakre/xmlreaderiterator": "^0.1.10",
+        "stephanschuler/dependency-scheduler": "dev-master"
     },
     "autoload": {
         "psr-4": {

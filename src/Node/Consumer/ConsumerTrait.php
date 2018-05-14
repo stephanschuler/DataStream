@@ -12,4 +12,9 @@ trait ConsumerTrait
         /** @var ConsumerInterface $this */
         $provider->consumedBy($this, $wireName);
     }
+
+    public function dependsOn(): array
+    {
+        return [];
+    }
 }

@@ -5,7 +5,7 @@ namespace StephanSchuler\DataStream\Node\Transport;
 
 use StephanSchuler\DataStream\Node\NodeInterface;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Scheduler;
+use StephanSchuler\DependencyScheduler\Scheduler;
 
 trait SplitterTrait
 {
@@ -26,7 +26,7 @@ trait SplitterTrait
     public function consume($data, $wireName = '')
     {
         /** @var NodeInterface $this */
-        Scheduler::globalInstance()->enqueueTask($this, function () use ($data) {
+        Scheduler::globalInstance()->enqueueWorkload($this, function () use ($data) {
 
             $generator = ($this->definition)($data);
             foreach ($generator as $partData) {

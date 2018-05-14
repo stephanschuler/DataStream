@@ -5,7 +5,7 @@ namespace StephanSchuler\DataStream\Node\Source;
 
 use StephanSchuler\DataStream\Node\Provider\ProviderTrait;
 use StephanSchuler\DataStream\Runtime\GraphBuilder;
-use StephanSchuler\DataStream\Scheduler\Scheduler;
+use StephanSchuler\DependencyScheduler\Scheduler;
 
 class Csv implements SourceInterface
 {
@@ -42,7 +42,7 @@ class Csv implements SourceInterface
 
     public function provide()
     {
-        Scheduler::globalInstance()->enqueueTask($this, function () {
+        Scheduler::globalInstance()->enqueueWorkload($this, function () {
 
             $fp = fopen($this->fileName, 'r');
             while ($line = fgetcsv($fp, 0, $this->delimiter, $this->enclosure, $this->escape)) {
